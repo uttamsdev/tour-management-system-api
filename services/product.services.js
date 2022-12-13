@@ -19,8 +19,35 @@ const updateProductService = async (id, data) => {
   //updateOne  method validation check kore na.. se jono runValidator true kore dite hoi.
 };
 
-module.exports = {
+const bulkProductUpdateService = async (data) => {
+  const result = await Product.updateMany({ _id: data.ids }, data.data, {
+    runValidators: true,
+  }); // data ta ekhane update hobe
+
+  //   const products = [];
+  //   data.ids.forEach(product => {
+  //     products.push(Product.updateOne({_id: product.id}, product.data))
+  //   })
+  //   const result  = await Promise.all(products);
+  return result;
+};
+
+
+const deleteProductByIdService = async(id) => {
+  const result = await Product.deleteOne({_id: id});
+  return result;
+}
+
+const bulkDeleteProductService = async(ids) => {
+  const result = await Product.deleteMany({_id: ids}) // ids is an array here. 
+  return result;
+}
+
+ module.exports = {
   getProductsService,
   createProductService,
   updateProductService,
+  bulkProductUpdateService,
+  deleteProductByIdService,
+  bulkDeleteProductService
 };

@@ -4,6 +4,9 @@ const {
   getProductsService,
   createProductService,
   updateProductService,
+  bulkProductUpdateService,
+  deleteProductByIdService,
+  bulkDeleteProductService
 } = require("../services/product.services");
 const createProduct = async (req, res, next) => {
   try {
@@ -41,11 +44,11 @@ const getProduct = async (req, res, next) => {
 const updateProduct = async (req, res, next) => {
   try {
     const id = req.params.id;
-    const result = await updateProductService(id,req.body);
+    const result = await updateProductService(id, req.body);
     res.status(200).json({
-        status: "Success",
-        message: "Successfully updated the product"
-    })
+      status: "Success",
+      message: "Successfully updated the product",
+    });
   } catch (error) {
     res.status(400).json({
       status: "fail",
@@ -55,4 +58,63 @@ const updateProduct = async (req, res, next) => {
   }
 };
 
-module.exports = { getProduct, createProduct, updateProduct };
+const bulkProductUpdate = async (req, res, next) => {
+  try {
+
+    const result = await bulkProductUpdateService(req.body);
+    res.status(200).json({
+      status: "Success",
+      message: "Successfully updated the product",
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: "fail",
+      message: "Cannot get the data",
+      err: error.message,
+    });
+  }
+};
+
+
+const deleteProductById = async (req, res, next) => {
+  try {
+    const {id} = req.params;
+    const result = await deleteProductByIdService(id);
+    res.status(200).json({
+      status: "Success",
+      message: "Successfully deleted the product",
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: "fail",
+      message: "Cannot delete the product",
+      err: error.message,
+    });
+  }
+};
+
+
+const bulkProductDelete = async (req, res, next) => {
+  try {
+    console.log(req.body);
+    const result = await bulkDeleteProductService(req.body.ids);
+    res.status(200).json({
+      status: "Success",
+      message: "Successfully deleted the products",
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: "fail",
+      message: "Cannot delete the products",
+      err: error.message,
+    });
+  }
+};
+module.exports = {
+  getProduct,
+  createProduct,
+  updateProduct,
+  bulkProductUpdate,
+  deleteProductById,
+  bulkProductDelete
+};
